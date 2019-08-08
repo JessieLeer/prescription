@@ -1,4 +1,4 @@
-# vue-demo
+# prescription
 
 > A Vue.js project
 
