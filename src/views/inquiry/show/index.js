@@ -23,6 +23,7 @@ export default {
 	methods: {
 		show() {
 			this.$http.get('/api/web/physician/prescriptionDetail', {params: {loginUid: this.user.loginUid, physicianId: this.user.physicianId, diagnoseId: this.$route.params.id}}).then((res) => {
+				console.log(res)
 				this.src = res.data.data.prescription_img
 			})
 		}

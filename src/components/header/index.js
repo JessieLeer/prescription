@@ -14,7 +14,7 @@ export default {
 		}
 	},
 	created() {
-		this.ifNew()
+		//this.ifNew()
 	},
 	methods: {
 		open() {
@@ -54,15 +54,8 @@ export default {
 		},
 		logout() {
 			this.$http.post('/api/web/physician/logout', qs.stringify({loginUid: this.user.loginUid, physicianId: this.user.physicianId})).then((res) => {
-				if(res.data.retcode == 1) {
-					this.$store.commit('logout')
-					this.$router.push('/login')
-				}else{
-					this.$message({
-						message: '退出失败，请稍后再试',
-						type: 'warning'
-					})
-				}
+				this.$store.commit('logout')
+				this.$router.push('/login')
 			})
 		}
 	}

@@ -8,9 +8,10 @@
 					<el-tab-pane label="我的模版" name="1"></el-tab-pane>
 					<el-tab-pane label="药店模版" name="2"></el-tab-pane>
 				</el-tabs>
-				<el-form v-bind:inline="true" :model="searchForm" size='small' align='right'>
+				<el-form v-bind:inline="true" :model="searchForm" size='small' align='right' >
 					<el-form-item>
 						<el-select v-model="searchForm.shop" placeholder="药店">
+						  <el-option label='全部药店' value=''></el-option>
 							<el-option v-for='(item, index) in shops' v-bind:key='index' v-bind:label="item.name" v-bind:value="item.id"></el-option>
 						</el-select>
 					</el-form-item>
@@ -22,7 +23,7 @@
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" v-on:click="index(1)">查询</el-button>
-						<el-button type="default" v-on:click='addFormVisible = true'>新增模版</el-button>
+						<el-button type="default" v-on:click='addFormVisible = true' v-if='type == 1'>新增模版</el-button>
 					</el-form-item>
 				</el-form>
 				<el-table v-bind:data="prescriptions" v-bind:span-method="prescriptionSpanMethod" max-height="500">
@@ -33,7 +34,7 @@
 						</template>
 					</el-table-column>
 					<el-table-column prop="drugName" label="药品名" align='center'></el-table-column>
-					<el-table-column prop="drugCode" label="药品批号" align='center'></el-table-column>
+					<el-table-column prop="drugCode" label="批准文号" align='center'></el-table-column>
 					<el-table-column prop="drugManu" label="厂商" align='center' show-overflow-tooltip> </el-table-column>
 					<el-table-column prop="drugPackageSpec" label="规格" align='center'></el-table-column>
 					<el-table-column prop="dosageUsage" label="用法用量" align='center'></el-table-column>

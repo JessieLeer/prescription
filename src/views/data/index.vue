@@ -47,7 +47,7 @@
 					  <el-form label-width="80px" align='left' size='small'>
 						  <el-form-item>
 							  <el-upload class="avatar-uploader" action="nourl" accept=".jpg,.jpeg,.png,.gif" v-bind:http-request='uploadAvatar' v-bind:show-file-list="false">
-									<img v-if="form.headImg" v-bind:src="form.headImg" class="avatar" width='100'>
+									<img v-if="form.headImg" v-bind:src="'http://chufang.ysk360.com' + form.headImg" class="avatar" width='100'>
 									<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 								</el-upload>
 							</el-form-item>

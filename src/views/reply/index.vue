@@ -23,7 +23,7 @@
 				<el-dialog title="新增快捷回复" :visible.sync="dialogFormVisible" class='suggestion'>
 					<el-form ref="form" :model="form" v-bind:rules="rules" class='form'>
 						<el-form-item prop='content'>
-							<el-input v-model="form.content" type='textarea' rows='4' placeholder='输入快捷回复内容'></el-input> 
+							<el-input v-model="form.content" type='textarea' rows='4' placeholder='输入快捷回复内容' maxlength="150" show-word-limit></el-input> 
 						</el-form-item>
 					</el-form>
 					<div slot="footer" class="dialog-footer">
