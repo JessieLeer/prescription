@@ -52,6 +52,15 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+		proxyTable: {
+			'/api': {
+        target: 'http://chufang.ysk360.com/', 
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+		},
 
     /**
      * Source Maps
