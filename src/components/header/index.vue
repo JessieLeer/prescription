@@ -2,7 +2,7 @@
   <el-header class='w-100 mb-10'>
 		<el-menu class="el-menu-demo" mode="horizontal" >
 			<el-menu-item>
-			  <img src='https://img.alicdn.com/tfs/TB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png' width='120'> 药盈处方云平台
+			  <img src='../../assets/image/logo.png' width='50'> 药盈处方云平台
 			</el-menu-item>
 			<el-submenu index="2" style='float: right;'>
 			  <template slot="title">

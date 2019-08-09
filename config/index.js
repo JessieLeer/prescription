@@ -13,7 +13,6 @@ module.exports = {
     proxyTable: {
 			'/api': {
         target: 'http://chufang.ysk360.com/', 
-				//target: 'http://192.168.1.101:8080/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

@@ -98,7 +98,7 @@ export default {
       })
 		}
 	},
-	created() {
+	created() {	
 		this.loginIm()
 		this.init()
 		this.prescriptionIndex()
