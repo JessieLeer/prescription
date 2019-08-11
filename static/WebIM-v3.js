@@ -25,7 +25,13 @@ function getUrl(){
     else if(window.location.href.indexOf("localhost") !== -1){
         apiUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//a1.easemob.com"
         xmppUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//im-api-v2.easemob.com/ws"
-    }
+    }else if(window.location.href.indexOf("chufang.ysk360.com") !== -1){
+			  apiUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//a1.easemob.com"
+        xmppUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//im-api-v2.easemob.com/ws"
+		}else if(window.location.href.indexOf("127.0.0.1") !== -1){
+			  apiUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//a1.easemob.com"
+        xmppUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//im-api-v2.easemob.com/ws"
+		}
     return {
         apiUrl: apiUrl,
         xmppUrl: xmppUrl

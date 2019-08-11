@@ -14,9 +14,7 @@ module.exports = {
 			'/api': {
         target: 'http://chufang.ysk360.com/', 
         changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
+        pathRewrite: {'/api':'/'}
       }
 		},
 
@@ -56,9 +54,7 @@ module.exports = {
 			'/api': {
         target: 'http://chufang.ysk360.com/', 
         changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
+        pathRewrite: {'/api':'/'}
       }
 		},
 
