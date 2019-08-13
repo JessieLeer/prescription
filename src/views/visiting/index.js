@@ -41,7 +41,7 @@ export default {
 			sugtemplates: [],
 			receives: [],
 			sends: [],
-			editing: '',
+			editing: '你好',
 			quickApplyShow: false,
 			quickApplies: [],
 			medicine: {
@@ -52,6 +52,7 @@ export default {
 				total: 0
 			},
 			prescriptions: [],
+			prescriptionUrl: '',
 		}
 	},
 	components: {
@@ -111,6 +112,9 @@ export default {
 		  this.$refs.prescription.style.height = window.innerHeight - 200 + 'px'
 			this.$refs.patientWrapper.style.height = window.innerHeight - 200 + 'px'
 		})
+		window.setTimeout(() => {
+			this.sendPrivateText()
+		},1000)
 	},
 	methods: {
 		back() {
@@ -127,9 +131,9 @@ export default {
         apiUrl: WebIM.config.apiURL,
         user: this.user.imUsername,
         pwd: this.user.imPassword,
-        appKey: WebIM.config.appkey
+        appKey: WebIM.config.appkey,
       }
-      conn.open(options)
+			conn.open(options)
     },
 		/*-- 获取历史问诊 --*/
 		historiesIndex(page) {
@@ -206,6 +210,7 @@ export default {
 		},
 		rtAudioCall() {
       rtcCall.caller = this.user.imUsername
+			
       rtcCall.makeVoiceCall(this.$route.params.imuser)
     },
 		rtVideoCall() {
@@ -321,7 +326,7 @@ export default {
 		/*-- 获取快捷回复 --*/
 		quickApplyIndex() {
 			this.$http.get('/api/web/physician/getQuickReply', {params: {physicianId: this.user.physicianId, loginUid: this.user.loginUid}}).then((res) => {
-				this.quickApplies = res.data.data.quickReplyList
+				this.quickApplies = res.data.data
 			})
 		},
 		/*-- 药品查询 --*/
@@ -338,7 +343,14 @@ export default {
 		},
 		/*-- 从处方中移除 --*/
 		prescriptionRemove(medicine) {
-			this.prescriptions.splice(this.prescriptions.indexOf(medicine), 1)
+			this.$confirm('确定将该药品从处方中移除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+				this.prescriptions.splice(this.prescriptions.indexOf(medicine), 1)
+			}).catch(() => {
+			})
 		},
 		/*-- 提交处方 --*/
 		prescriptionSave() {
@@ -353,6 +365,9 @@ export default {
 							message: res.data.retmsg,
 							type: 'success'
 						})
+						this.prescriptionUrl = res.data.data.prescription_img
+						this.editing = 	`<a href='${res.data.data.prescription_img}' target='_blank'>点击查看处方</a>`
+						this.sendPrivateText()
 					}else{
 						this.$message({
 							message: res.data.retmsg,

@@ -14,7 +14,7 @@ export default {
 		}
 	},
 	created() {
-		//this.ifNew()
+		this.ifNew()
 	},
 	methods: {
 		open() {

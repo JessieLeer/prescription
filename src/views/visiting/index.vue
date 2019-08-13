@@ -41,7 +41,7 @@
 								</el-form-item>
 								<br>
 								<el-form-item>
-									<el-button type='primary' size='small' v-on:click='saveCase("form")'>保存病例</el-button>
+									<el-button type='primary' size='small' v-on:click='saveCase("form")' v-bind:disabled='prescriptionUrl != ""' v-bind:title='prescriptionUrl == "" ? "" : "处方已经提交，不可再更改病例"'>保存病例</el-button>
 								</el-form-item>
 							</el-form>
 						</div>	
@@ -51,7 +51,7 @@
 						  <ul class="infinite-list">
 								<li v-for='(item,index) in messages' v-bind:key='index' class="infinite-list-item f-cb" v-bind:class='item.type == "receive" ? "f-tal" : "f-tar"'> 
 								  <el-avatar size="small" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" v-bind:class='item.type == "receive" ? "f-fl" : "f-fr"' class='chat-avatar'></el-avatar>
-									<i class='message f-fsn f-ib f-fs2' v-bind:class='item.type == "receive" ? "message-receive" : "message-send"' v-if='item.chatType == "text"'>{{item.data}}</i>
+									<i class='message f-fsn f-ib f-fs2' v-bind:class='item.type == "receive" ? "message-receive" : "message-send"' v-if='item.chatType == "text"' v-html='item.data'></i>
 									<a v-bind:href='item.data' target='_blank' v-if='item.chatType == "image"' class='message-image f-ib' v-bind:class='item.type == "receive" ? "message-receive" : "message-send"'>
 									  <img v-bind:src='item.data' class='chat-image'>
 									</a>
@@ -86,9 +86,10 @@
 					  <el-card class="medicine-wrapper box-card" shadow='never'>
 							<header slot="header" class="medicine-header">
 								<h4 class='f-tal'>处方信息</h4>
-								<el-button class='opera' type="text" v-on:click='medicine.show = true; medicineIndex(medicine.page)'>手动添加药品</el-button>
+								<el-button class='opera' type="text" v-on:click='medicine.show = true; medicineIndex(medicine.page)' v-if='prescriptionUrl == ""'>手动添加药品</el-button>
 							</header>
-							<div ref='prescription' class='pr-20 f-oa'>
+							
+							<div ref='prescription' class='pr-20 f-oa' v-if='prescriptionUrl == ""'>
 								<el-form v-for='(item, index) in prescriptions' v-bind:key='index' label-width='40px' class='prescription-form f-tal'>
 									<el-form-item class='no-mb f-cb f-fwb' label-width='0'>
 										{{item.drugName}}
@@ -104,6 +105,7 @@
 								</el-form>
 								<el-button type='primary' size='small' v-if='prescriptions.length > 0' v-on:click='prescriptionSave'>提交处方</el-button>
 							</div>
+							<el-image v-bind:src="prescriptionUrl" fit="fit" v-else></el-image>
 						</el-card>
 					</el-col>
 				</el-row>
@@ -135,6 +137,7 @@
 				</el-dialog>
 				<el-dialog v-bind:visible.sync="medicine.show" width="50%" v-bind:show-close='false' class='quick-apply'>
 				  <el-input placeholder="药品名称/助记码" v-model="medicine.name" slot='title' size='small'>
+					  <el-button slot="prepend" v-on:click='medicine.show = false'>关闭</el-button>
 						<el-button slot="append" icon="el-icon-search" v-on:click='medicineIndex(1)'></el-button>
 					</el-input>
 				  <el-table v-bind:data="medicine.data" max-height="280">
@@ -154,7 +157,7 @@
 						v-bind:total="medicine.total">
 					</el-pagination>
 				</el-dialog>
-				<el-dialog v-bind:visible.sync="videoShow" width='50%' v-on:close='handleVideoEnd'>
+				<el-dialog v-bind:visible.sync="videoShow" width='50%' v-on:close='handleVideoEnd' v-bind:close-on-click-modal='false'>
 				  <video id="v2" muted="true" autoplay></video>
 				</el-dialog>
 			</el-main>

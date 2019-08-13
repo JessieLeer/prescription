@@ -65,23 +65,7 @@ conn.listen({
 	//收到文件消息
 	onFileMessage(message) {},    
 	//收到视频消息
-	onVideoMessage(message) {
-		var node = document.getElementById('privateVideo')
-		var option = {
-			url: message.url,
-			headers: {
-				'Accept': 'audio/mp4'
-			},
-			onFileDownloadComplete(response) {
-				var objectURL = WebIM.utils.parseDownloadResponse.call(conn, response)
-				node.src = objectURL
-			},
-			onFileDownloadError() {
-				console.log('File down load error.')
-			}
-		}
-		WebIM.utils.download.call(conn, option)
-	},  
+	onVideoMessage(message) {},  
 	//处理“广播”或“发布-订阅”消息，如联系人订阅请求、处理群组、聊天室被踢解散等消息
 	onPresence( message ) {},  
 	//处理好友申请
@@ -138,6 +122,7 @@ if (WebIM.WebRTC) {
         video.srcObject = stream
       },
       onRinging(caller, streamType) {
+				console.log('收到通话请求')
 				let str
 				if(streamType == 'VIDEO') {
 					str = '邀请您进行视频通话'
