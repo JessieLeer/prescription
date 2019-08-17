@@ -24,6 +24,9 @@ export default {
 		}
 	},
 	created() {
+		window.setInterval(() => {
+			this.index(this.page.current)
+		},10000)
 		this.index(1)
 	},
 	components: {

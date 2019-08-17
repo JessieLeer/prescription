@@ -1,4 +1,5 @@
 import qs from 'qs'
+import VueDragResize from 'vue-drag-resize'
 import cheader from '@/components/header/index.vue'
 import { conn, rtcCall } from "../../webim/index"
 
@@ -41,7 +42,7 @@ export default {
 			sugtemplates: [],
 			receives: [],
 			sends: [],
-			editing: '你好',
+			editing: '',
 			quickApplyShow: false,
 			quickApplies: [],
 			medicine: {
@@ -53,9 +54,19 @@ export default {
 			},
 			prescriptions: [],
 			prescriptionUrl: '',
+			confrIds: [],
+			callDuration: {
+				minute: 0,
+				second: 0
+			},
+			width: 500,
+      height: 400,
+      top: 0,
+      left: 0
 		}
 	},
 	components: {
+		VueDragResize,
 		cheader
 	},
 	computed: {
@@ -73,6 +84,14 @@ export default {
 				return a.created_at < b.created_at ? -1 : 1
 			})
 		},
+		audioShow: {
+			get() {
+				return this.$store.state.config.audioShow
+			},
+			set(newValue) {
+				return this.$store.state.config.audioShow = newValue
+			}
+		},
 		videoShow: {
 			get() {
 				return this.$store.state.config.videoShow
@@ -81,11 +100,18 @@ export default {
 				return this.$store.state.config.videoShow = newValue
 			}
 		}
-	},
+ 	},
 	watch: {
 		receive(val, oldVal) {
 			if(val.from == this.$route.params.imuser) {
 				this.receives.push(val)
+				if(val.data == '对方已经结束问诊'){
+					this.$http.post('/api/web/physician/finishDiagnose', qs.stringify({loginUid: this.user.loginUid, physicianId: this.user.physicianId, diagnoseId: this.$route.params.diagnose, confrIds: this.confrIds.toString()})).then((res) => {
+						if(res.data.retcode == 1) {
+							this.$router.push('/finish')
+						}
+					})
+				}
 			}
 		},
 		send(val, oldVal) {
@@ -97,9 +123,10 @@ export default {
 			this.$nextTick(_ => {
         this.$refs.messageWrapper.scrollTop = this.$refs.messageWrapper.scrollHeight
       })
-		}
+		},
 	},
 	created() {	
+		this.editing = `您好，我是${this.user.name}医师，由我来为您接诊！`
 		this.loginIm()
 		this.init()
 		this.prescriptionIndex()
@@ -171,7 +198,7 @@ export default {
 				this.disease = res.data.data.map((item) => {
 					return {
 						id: item.id,
-						value: item.name
+						value: item.type == 2 ? item.name + '(药店)' : item.name
 					}
 				})
 			})
@@ -209,15 +236,27 @@ export default {
 			})
 		},
 		rtAudioCall() {
+			this.$store.commit('handleAudio', true)
       rtcCall.caller = this.user.imUsername
-			
       rtcCall.makeVoiceCall(this.$route.params.imuser)
+			this.callDuration.minute = 0
+			this.callDuration.second = 0
+		  window.setTimeout(() => {
+				this.confrIds.push(JSON.parse(JSON.parse(window.localStorage.mycon).content).confrId)
+			},1000)
     },
 		rtVideoCall() {
 		  this.$store.commit('handleVideo', true)
       rtcCall.caller = this.user.imUsername
       rtcCall.makeVideoCall(this.$route.params.imuser)
+			window.setTimeout(() => {
+				this.confrIds.push(JSON.parse(JSON.parse(window.localStorage.mycon).content).confrId)
+			},1000)
     },
+		handleAudioEnd() {
+			this.$store.commit('handleAudio', false)
+			rtcCall.endCall()
+		},
 		handleVideoEnd() {
 			this.$store.commit('handleVideo', false)
 			rtcCall.endCall()
@@ -385,9 +424,39 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-				this.$router.push('/finish')
+				this.$http.post('/api/web/physician/finishDiagnose', qs.stringify({loginUid: this.user.loginUid, physicianId: this.user.physicianId, diagnoseId: this.$route.params.diagnose, confrIds: this.confrIds.toString()})).then((res) => {
+					if(res.data.retcode == 1) {
+						this.$message({
+							message: res.data.retmsg,
+							type: 'success'
+						})
+						this.editing = '对方已经结束问诊'
+						this.sendPrivateText()
+						conn.close()
+						this.$router.push('/finish')
+					}else{
+						this.$message({
+							message: res.data.retmsg,
+							type: 'warning'
+						})
+					}
+				})
       }).catch(() => {
       })
+		},
+		resize(newRect) {
+      this.width = newRect.width
+      this.height = newRect.height
+      this.top = newRect.top
+      this.left = newRect.left
+    },
+		minimize() {
+			this.width = 150
+      this.height = 150
+		},
+		reduction() {
+			this.width = 500
+			this.height = 400
 		}
 	}
 }

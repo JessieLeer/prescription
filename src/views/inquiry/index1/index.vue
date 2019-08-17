@@ -25,16 +25,13 @@
 					</header>
 					<div class='f-cb'>
 						<el-avatar shape="square"  src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" class='avatar f-fl'></el-avatar>
-						<el-form :inline="true" class='f-fl ml-20 form' lebal-width='80px'>
+						<el-form :inline="true" class='f-fl ml-20 form f-tal' lebal-width='80px'>
 							<el-form-item class='f-fwb'>{{item.memberName}}</el-form-item>
 							<el-form-item>{{item.gender}}</el-form-item>
 							<el-form-item>{{item.age}}岁</el-form-item>
 							<el-form-item>{{item.memberPhone}}</el-form-item>
-							<el-form-item>
-								<el-tag>第{{item.diagnoseNum}}次问诊</el-tag>
-							</el-form-item>
 							<br>
-							<el-form-item label='过敏史' class='f-fl'>{{item.checkContent}}</el-form-item>
+							<el-form-item label='过敏史' class='f-fl'>{{item.checkContent == '' ? '无' : item.checkContent}}</el-form-item>
 							<el-form-item label='患者主诉'>{{item.mainSymptom}}</el-form-item>
 						</el-form>
 						<el-button class='receive f-fr' type="primary" size='small' v-on:click='go(`/inquiry/show/${item.diagnoseId}`)'>查看详情</el-button>

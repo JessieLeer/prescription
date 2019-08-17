@@ -73,4 +73,12 @@ li{
 .prescription-form .el-form-item__label,.prescription-form .el-form-item__content{
 	line-height: 24px;
 }
+
+.vdr-stick{
+	display: none;
+}
+	
+.vdr.active:before{
+	outline: 0px dashed #d6d6d6;
+}
 	

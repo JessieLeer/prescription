@@ -5,7 +5,7 @@ export default {
 	data() {
 		return  {
 			status: true,
-			lastId: 0
+			isNew: false
 		}
 	},
 	computed: {
@@ -14,7 +14,7 @@ export default {
 		}
 	},
 	created() {
-		this.ifNew()
+		this.interval(this.ifNew,10000)
 	},
 	methods: {
 		open() {
@@ -23,29 +23,23 @@ export default {
         message: h('i', { style: 'color: teal'}, '您有一条新的问诊')
       })
     },
+		interval(func, wait) {
+			let interv = function() {
+				func.call(null)
+				setTimeout(interv, wait)
+			}
+			setTimeout(interv, wait)
+		},
 		ifNew() {
-			window.setInterval(() => {
-				this.$http.get('/api/web/physician/getNewDiagnoseNum', {params: {loginUid: this.user.loginUid, physicianId: this.user.physicianId}}).then((res) => {
-					if(res.data.retcode == 1) {
-						if(res.data.data == this.lastId) {
-						}else{
-							this.lastId = res.data.data
-							this.open()
-						}
-					}else if(res.data.retcode == 2){
-						this.$message({
-							message: res.data.retmsg,
-							type: 'warning'
-						})
-						this.$router.push('/login')
-					}else{
-						this.$message({
-							message: res.data.retmsg,
-							type: 'warning'
-						})
-					}
-				})
-			},10000)
+			this.$http.get('/api/web/physician/getNewDiagnoseNum', {params: {loginUid: this.user.loginUid, physicianId: this.user.physicianId}}).then((res) => {
+				if(res.data.retcode == 1) {
+					this.open()
+				}else if(res.data.retcode == 2){
+					this.$router.push('/login')
+				}else{
+					
+				}
+			})
 		},
 		toggleStatus(status) {
 			this.$http.post('/api/web/physician/switchStatus', qs.stringify({loginUid: this.user.loginUid, physicianId: this.user.physicianId, status: status ? 1 : 0})).then((res) => {

@@ -136,7 +136,7 @@
 					</ul>
 				</el-dialog>
 				<el-dialog v-bind:visible.sync="medicine.show" width="50%" v-bind:show-close='false' class='quick-apply'>
-				  <el-input placeholder="药品名称/助记码" v-model="medicine.name" slot='title' size='small'>
+				  <el-input placeholder="药品名称/助记码" v-model="medicine.name" slot='title' size='small' @keyup.native.enter='medicineIndex(1)'>
 					  <el-button slot="prepend" v-on:click='medicine.show = false'>关闭</el-button>
 						<el-button slot="append" icon="el-icon-search" v-on:click='medicineIndex(1)'></el-button>
 					</el-input>
@@ -157,9 +157,21 @@
 						v-bind:total="medicine.total">
 					</el-pagination>
 				</el-dialog>
-				<el-dialog v-bind:visible.sync="videoShow" width='50%' v-on:close='handleVideoEnd' v-bind:close-on-click-modal='false'>
-				  <video id="v2" muted="true" autoplay></video>
-				</el-dialog>
+				<VueDragResize :isActive="true" v-bind:w="200" v-bind:h='100' v-on:resizing="resize" v-on:dragging="resize" v-show="audioShow" class='bg-white'>
+				  <section class='pt-5 pb-5 f-tar'>
+				    <el-button type="warning" icon="el-icon-close" circle v-on:click='handleAudioEnd' class='video-close' size='small'> </el-button>
+					</section>
+				  <section class='f-tac f-fs2'>语音通话中...</section>
+					<!--<section class='f-tac'>{{callDuration.minute}} : {{callDuration.second}}</section>-->
+				</VueDragResize>
+				<VueDragResize :isActive="true" v-bind:w="width" v-bind:h='height' v-on:resizing="resize" v-on:dragging="resize" v-show="videoShow" class='bg-white'>
+				  <section class='pt-5 pb-5 f-tar'>
+						<el-button type="warning" icon="el-icon-close" circle v-on:click='handleVideoEnd' class='video-close' size='small'> </el-button>
+						<el-button type="success" circle v-on:click='minimize' class='video-close' size='small' icon='el-icon-minus'></el-button>
+						<el-button type="primary" circle v-on:click='reduction' class='video-close' size='small' icon='el-icon-full-screen'></el-button>
+					</section>
+          <video id="v1" autoplay class='w-100'></video>
+        </VueDragResize>
 			</el-main>
 	  </el-container>
 	</div>

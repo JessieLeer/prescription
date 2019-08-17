@@ -5,6 +5,7 @@ import axios from 'axios'
 const state = {
 	serverUrl: '',
 	hardwareId: '0cb4b19661f0a66df57c386e420ccecc',
+	audioShow: false,
 	videoShow: false
 }
 
@@ -19,9 +20,12 @@ const actions = {
 
 // mutations
 const mutations = {
+	handleAudio(state,status) {
+		state.audioShow = status
+	},
 	handleVideo(state,status) {
 		state.videoShow = status
-	},
+	}
 }
 
 export default {

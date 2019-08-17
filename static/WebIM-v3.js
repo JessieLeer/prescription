@@ -12,30 +12,18 @@
 // }
 
 function getUrl(){
-    var apiUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//a1.easemob.com"
-    var xmppUrl = "im-api-v2.easemob.com/ws"
-    if(window.location.href.indexOf("webim-h5.easemob.com") !== -1 ){
-        apiUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//a1.easemob.com"
-        xmppUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//im-api-v2.easemob.com/ws"
-    }
-    else if(window.location.href.indexOf("www.mxiang.com") !== -1){
-        apiUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//a1.easemob.com"
-        xmppUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//im-api-v2.easemob.com/ws"
-    }
-    else if(window.location.href.indexOf("localhost") !== -1){
-        apiUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//a1.easemob.com"
-        xmppUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//im-api-v2.easemob.com/ws"
-    }else if(window.location.href.indexOf("chufang.ysk360.com") !== -1){
-			  apiUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//a1.easemob.com"
-        xmppUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//im-api-v2.easemob.com/ws"
-		}else if(window.location.href.indexOf("127.0.0.1") !== -1){
-			  apiUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//a1.easemob.com"
-        xmppUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//im-api-v2.easemob.com/ws"
-		}
-    return {
-        apiUrl: apiUrl,
-        xmppUrl: xmppUrl
-    }
+  let apiUrl, xmppUrl
+	let legalUrls = ['localhost', 'chufang.ysk360.com']
+	if(legalUrls.filter((item) => {
+		return window.location.href.indexOf(item) != -1
+	}).length > 0) {
+		apiUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//a1.easemob.com"
+    xmppUrl = (window.location.protocol === "https:" ? "https:" : "http:") + "//im-api-v2.easemob.com/ws"
+	}
+  return {
+    apiUrl: apiUrl,
+    xmppUrl: xmppUrl
+  }
 }
 
 

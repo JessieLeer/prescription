@@ -115,14 +115,12 @@ if (WebIM.WebRTC) {
         console.log("onAcceptCall::", "from: ", from, "options: ", options)
       },
       onGotRemoteStream(stream, streamType) {
-        console.log('remote stream')
-      },
-      onGotLocalStream(stream, streamType) {
-        var video = document.getElementById("v2")
+				let video = document.getElementById("v1")
         video.srcObject = stream
       },
+      onGotLocalStream(stream, streamType) {
+      },
       onRinging(caller, streamType) {
-				console.log('收到通话请求')
 				let str
 				if(streamType == 'VIDEO') {
 					str = '邀请您进行视频通话'
@@ -133,16 +131,28 @@ if (WebIM.WebRTC) {
           rtcCall.acceptCall()
 					if(streamType == 'VIDEO') {
 						store.commit('handleVideo', true)
+					}else{
+						store.commit('handleAudio', true)
 					}
         } else {
           rtcCall.endCall()
         }
       },
       onTermCall(reason) {
-        console.log("reason:", reason)
+				if(reason == 'reject') {
+					alert('对方已经挂断')
+					store.commit('handleVideo', false)
+					store.commit('handleAudio', false)
+				}else if(reason == 'hangup') {
+					store.commit('handleVideo', false)
+					store.commit('handleAudio', false)
+				}
       },
       onIceConnectionStateChange(iceState) {
-        console.log("onIceConnectionStateChange::", "iceState:", iceState)
+	      if(iceState == 'disconnected' || iceState == 'closed') {
+					store.commit('handleVideo', false)
+					store.commit('handleAudio', false)
+				}
       },
       onError(e) {
         if (e.event.name == "NotAllowedError") {

@@ -17,10 +17,10 @@
 								<el-input v-model="form.phone"></el-input>
 							</el-form-item>
 							<el-form-item label="简介" prop='intro'>
-								<el-input v-model="form.intro"></el-input>
+								<el-input v-model="form.intro" type='textarea'></el-input>
 							</el-form-item>
 							<el-form-item label="个人成就" prop='history'>
-								<el-input v-model="form.history"></el-input>
+								<el-input v-model="form.history" type='textarea'></el-input>
 							</el-form-item>
 							<el-form-item label=''>
 								<el-button type="primary" v-on:click='updateInfo("form")'>保存</el-button>
