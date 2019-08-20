@@ -31,15 +31,15 @@ export default {
 			setTimeout(interv, wait)
 		},
 		ifNew() {
-			this.$http.get('/api/web/physician/getNewDiagnoseNum', {params: {loginUid: this.user.loginUid, physicianId: this.user.physicianId}}).then((res) => {
-				if(res.data.retcode == 1) {
-					this.open()
-				}else if(res.data.retcode == 2){
-					this.$router.push('/login')
-				}else{
-					
-				}
-			})
+			if(this.user.loginUid) {
+				this.$http.get('/api/web/physician/getNewDiagnoseNum', {params: {loginUid: this.user.loginUid, physicianId: this.user.physicianId}}).then((res) => {
+					if(res.data.retcode == 1) {
+						this.open()
+					}else if(res.data.retcode == 2){
+						this.logout()
+					}
+				})
+			}
 		},
 		toggleStatus(status) {
 			this.$http.post('/api/web/physician/switchStatus', qs.stringify({loginUid: this.user.loginUid, physicianId: this.user.physicianId, status: status ? 1 : 0})).then((res) => {

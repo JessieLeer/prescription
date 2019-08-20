@@ -255,10 +255,14 @@ export default {
     },
 		handleAudioEnd() {
 			this.$store.commit('handleAudio', false)
+			this.editing = '音频通话已经结束'
+			this.sendPrivateText()
 			rtcCall.endCall()
 		},
 		handleVideoEnd() {
 			this.$store.commit('handleVideo', false)
+			this.editing = '视频通话已经结束'
+			this.sendPrivateText()
 			rtcCall.endCall()
 		},
 		createFilter(queryString) {
